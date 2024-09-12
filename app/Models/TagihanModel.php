@@ -43,4 +43,21 @@ class TagihanModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function getWithSiswa()
+    {
+        $builder = $this->db->table('tagihan');
+        $builder->select('tagihan.*, siswa.name as name');
+        $builder->join('siswa', 'siswa.id = tagihan.siswa_id');
+        return $builder->get()->getResultArray();
+    }
+
+    public function getWithSiswaById($id)
+    {
+        $builder = $this->db->table('tagihan');
+        $builder->select('tagihan.*, siswa.name as name');
+        $builder->join('siswa', 'siswa.id = tagihan.siswa_id');
+        $builder->where('tagihan.id', $id);
+        return $builder->get()->getResultArray()[0];
+    }
 }

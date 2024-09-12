@@ -19,4 +19,11 @@ $routes->group('/', ['filter' => 'logout'], function ($routes) {
     $routes->get('/siswa/edit/(:any)', 'SiswaController::edit/$1');
     $routes->post('/siswa/update', 'SiswaController::update');
     $routes->get('/siswa/delete/(:any)', 'SiswaController::delete/$1');
+    // Tagihan
+    $routes->get('/tagihan', 'TagihanController::index');
+    $routes->get('/tagihan/add', 'TagihanController::add');
+    $routes->post('/tagihan/add', 'TagihanController::save');
+    $routes->get('/tagihan/edit/(:any)', 'TagihanController::edit/$1');
+    $routes->post('/tagihan/update', 'TagihanController::update');
+    $routes->get('/tagihan/delete/(:any)', 'TagihanController::delete/$1');
 });
