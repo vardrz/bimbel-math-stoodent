@@ -14,6 +14,7 @@ class UserSeeder extends Seeder
         $insertdata['name'] = 'Admin';
         $insertdata['email'] = 'admin@mail.com';
         $insertdata['password'] = password_hash('password', PASSWORD_BCRYPT);
+        $insertdata['role'] = 'admin';
 
         $admin->insert($insertdata);
     }

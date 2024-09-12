@@ -4,7 +4,7 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class Users extends Migration
+class Siswa extends Migration
 {
     public function up()
     {
@@ -19,31 +19,22 @@ class Users extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => 100
             ],
-            'email' => [
+            'wali' => [
                 'type' => 'VARCHAR',
                 'constraint' => 100
             ],
-            'password' => [
+            'email_wali' => [
                 'type' => 'VARCHAR',
-                'constraint' => 255
+                'constraint' => 100
             ],
-            'role' => [
-                'type' => 'VARCHAR',
-                'constraint' => 100,
-            ],
-            'siswa_id' => [
-                'type' => 'INT',
-                'constraint' => 11,
-                'null' => true
-            ]
         ]);
 
         $this->forge->addKey('id', true);
-        $this->forge->createTable('users');
+        $this->forge->createTable('siswa');
     }
 
     public function down()
     {
-        $this->forge->dropTable('users');
+        $this->forge->dropTable('siswa');
     }
 }

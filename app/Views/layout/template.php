@@ -13,6 +13,12 @@
   <link rel="stylesheet" href="<?= base_url('assets/')?>plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="<?= base_url('assets/')?>dist/css/adminlte.min.css">
+  <!-- Toastr -->
+  <link rel="stylesheet" href="<?= base_url('assets/')?>plugins/toastr/toastr.min.css">
+  <!-- Swal -->
+  <link rel="stylesheet" href="<?= base_url('assets/')?>plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+
+  <?= $this->renderSection('head') ?>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <!-- Site wrapper -->
@@ -54,7 +60,6 @@
               <i class="nav-icon fas fa-home"></i>
               <p>
                 Home
-                <span class="right badge badge-danger">New</span>
               </p>
             </a>
           </li>
@@ -74,6 +79,7 @@
             <a href="/pembayaran" class="nav-link">
               <i class="nav-icon fas fa-credit-card"></i>
               <p>Pembayaran</p>
+              <span class="right badge badge-danger">2</span>
             </a>
           </li>
           <li class="nav-item">
@@ -115,6 +121,25 @@
 <script src="<?= base_url('assets/')?>plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <!-- AdminLTE App -->
 <script src="<?= base_url('assets/')?>dist/js/adminlte.min.js"></script>
+<!-- Toastr -->
+<script src="<?= base_url('assets/')?>plugins/toastr/toastr.min.js"></script>
+<!-- Swal -->
+<script src="<?= base_url('assets/')?>plugins/sweetalert2/sweetalert2.min.js"></script>
+
+<script>
+  $(function(){
+    <?php if(session()->has("success")) { ?>
+      toastr.success('<?= session("success") ?>')
+    <?php } ?>
+  });
+</script>
+<script>
+  $(function(){
+    <?php if(session()->has("error")) { ?>
+      toastr.error('<?= session("error") ?>')
+    <?php } ?>
+  });
+</script>
 
 <?= $this->renderSection('script') ?>
 

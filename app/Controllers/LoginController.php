@@ -47,12 +47,16 @@ class LoginController extends BaseController
 
         if ($admin) {
             if (password_verify($password, $admin['password'])) {
-                session()->set([
-                    'email' => $admin['email'],
-                    'name' => $admin['name'],
-                    'logged_in' => TRUE
-                ]);
-                return redirect()->to(base_url('home'));
+                if($admin['role'] === "admin"){
+                    session()->set([
+                        'email' => $admin['email'],
+                        'name' => $admin['name'],
+                        'logged_in' => TRUE
+                    ]);
+                    return redirect()->to(base_url('home'));
+                }else{
+                    dd("login sebagai orangtua siswa");
+                }
             } else {
                 session()->setFlashdata('error', 'Password salah');
                 return redirect()->to(base_url());
