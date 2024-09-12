@@ -26,4 +26,11 @@ $routes->group('/', ['filter' => 'logout'], function ($routes) {
     $routes->get('/tagihan/edit/(:any)', 'TagihanController::edit/$1');
     $routes->post('/tagihan/update', 'TagihanController::update');
     $routes->get('/tagihan/delete/(:any)', 'TagihanController::delete/$1');
+
+
+
+    // Wali
+    $routes->get('/wali/home', 'WaliController::index');
+    $routes->get('/wali/bayar/(:any)', 'WaliController::bayar/$1');
+    $routes->post('/wali/bayar', 'WaliController::upload');
 });

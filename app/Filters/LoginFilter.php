@@ -26,7 +26,11 @@ class LoginFilter implements FilterInterface
     public function before(RequestInterface $request, $arguments = null)
     {
         if (session()->get('logged_in')) {
-            return redirect()->to(base_url('home'));
+            if(session()->get('role') == 'wali'){
+                return redirect()->to(base_url('wali/home'));
+            }else{
+                return redirect()->to(base_url('home'));
+            }
         }
     }
 

@@ -51,11 +51,19 @@ class LoginController extends BaseController
                     session()->set([
                         'email' => $admin['email'],
                         'name' => $admin['name'],
+                        'role' => $admin['role'],
                         'logged_in' => TRUE
                     ]);
                     return redirect()->to(base_url('home'));
                 }else{
-                    dd("login sebagai orangtua siswa");
+                    session()->set([
+                        'email' => $admin['email'],
+                        'name' => $admin['name'],
+                        'role' => $admin['role'],
+                        'siswa_id' => $admin['siswa_id'],
+                        'logged_in' => TRUE
+                    ]);
+                    return redirect()->to(base_url('wali/home'));
                 }
             } else {
                 session()->setFlashdata('error', 'Password salah');
