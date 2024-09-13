@@ -47,8 +47,19 @@ class TagihanModel extends Model
     public function getWithSiswa()
     {
         $builder = $this->db->table('tagihan');
-        $builder->select('tagihan.*, siswa.name as name');
+        $builder->select('tagihan.*, siswa.name as name, users.email',);
         $builder->join('siswa', 'siswa.id = tagihan.siswa_id');
+        $builder->join('users', 'users.siswa_id = tagihan.siswa_id');
+        return $builder->get()->getResultArray();
+    }
+
+    public function getWithSiswaForEmail()
+    {
+        $builder = $this->db->table('tagihan');
+        $builder->select('tagihan.*, siswa.name as name, users.email',);
+        $builder->join('siswa', 'siswa.id = tagihan.siswa_id');
+        $builder->join('users', 'users.siswa_id = tagihan.siswa_id');
+        $builder->where('tagihan.status', 'belum lunas');
         return $builder->get()->getResultArray();
     }
 

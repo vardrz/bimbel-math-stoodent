@@ -26,6 +26,9 @@ $routes->group('/', ['filter' => 'logout'], function ($routes) {
     $routes->get('/tagihan/edit/(:any)', 'TagihanController::edit/$1');
     $routes->post('/tagihan/update', 'TagihanController::update');
     $routes->get('/tagihan/delete/(:any)', 'TagihanController::delete/$1');
+    // Email
+    $routes->post('/tagihan/email/batch', 'TagihanController::emailBatch');
+    $routes->post('/tagihan/email/send', 'TagihanController::email');
 
 
 

@@ -40,7 +40,14 @@
             <!-- Default box -->
             <div class="card">
               <div class="card-body">
-                <a href="<?= base_url('tagihan/add') ?>" class="btn btn-primary mb-3">+ Buat Tagihan</a>
+                <div class="row">
+                  <div class="col-6">
+                    <a href="<?= base_url('tagihan/add') ?>" class="btn btn-primary mb-3">+ Buat Tagihan</a>
+                  </div>
+                  <div class="col-6 text-right">
+                    <button class="btn btn-success mb-3" data-toggle="modal" data-target="#modal-email">Kirim Email</button>
+                  </div>
+                </div>
 
                 <table id="table" class="table table-bordered table-striped">
                   <thead>
@@ -62,6 +69,7 @@
                         <td><?= "Rp " . number_format($d['biaya'], 0, ".", ","); ?></td>
                         <td><span class="badge text-md <?= $d['status'] == 'lunas' ? 'badge-success' : 'badge-danger' ?>"><?= $d['status']; ?></span></td>
                         <td>
+                          <button data-toggle="modal" data-target="#modal-send-email" onclick="email('<?= $d['name']; ?>', '<?= $d['bulan']; ?>', '<?= $d['tahun']; ?>', '<?= 'Rp ' . number_format($d['biaya']); ?>', '<?= $d['email']; ?>')" class="btn btn-success btn-sm"><i class="fas fa-envelope"></i></button>
                           <a href="<?= base_url('tagihan/edit/') . $d['id']; ?>" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>
                           <button onclick="confirmDelete('<?= base_url('tagihan/delete/') . $d['id']; ?>')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                         </td>
@@ -78,6 +86,69 @@
       </div>
     </section>
     <!-- /.content -->
+
+    <div class="modal fade" id="modal-email">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form action="<?= base_url('tagihan/email/batch'); ?>" method="post">
+          <div class="modal-header">
+            <h5 class="modal-title">Kirim Notifikasi Email</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Fitur ini akan mengirim email tagihan ke setiap siswa yang belum lunas.</p>
+            <label for="template">Template Email</label>
+<textarea name="template" id="template" class="form-control" rows="8">
+Rincian Tagihan Math Stoodent
+
+Nama Siswa : {siswa}
+Bulan : {bulan}
+Tahun : {tahun}
+Biaya : {biaya}
+
+Pembayaran dilakukan melalui transfer ke rekening berikut:
+BNI : 20812131212
+BCA : 28120123923
+
+Hormat kami,
+Math Stoodent</textarea>
+          </div>
+          <div class="modal-footer justify-content-between">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+            <button type="submit" class="btn btn-primary">Kirim Email</button>
+          </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="modal-send-email">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form action="<?= base_url('tagihan/email/send'); ?>" method="post">
+          <div class="modal-header">
+            <h5 class="modal-title">Kirim Notifikasi Email</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Kirim email notifikasi.</p>
+            <label for="template-send">Template Email</label>
+            <input type="hidden" name="email" id="email-send">
+            <input type="hidden" name="subject" id="subject-send">
+            <textarea name="template" id="template-send" class="form-control" rows="8"></textarea>
+          </div>
+          <div class="modal-footer justify-content-between">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+            <button type="submit" class="btn btn-primary">Kirim Email</button>
+          </div>
+          </form>
+        </div>
+      </div>
+    </div>
 <?= $this->endSection() ?>
 
 <?= $this->section('script') ?>
@@ -129,6 +200,28 @@
       }).then((val) => {
         val['isConfirmed'] && (window.location.href = href)
       })
+    }
+
+    function email(name, bulan, tahun, biaya, email){
+      var template = `Rincian Tagihan Math Stoodent
+
+Nama Siswa : {siswa}
+Bulan : {bulan}
+Tahun : {tahun}
+Biaya : {biaya}
+
+Pembayaran dilakukan melalui transfer ke rekening berikut:
+BNI : 20812131212
+BCA : 28120123923
+
+Hormat kami,
+Math Stoodent`;
+
+      var templateFix = template.replace('{siswa}', name).replace('{bulan}', bulan).replace('{tahun}', tahun).replace('{biaya}', biaya);
+
+      document.getElementById('template-send').innerHTML = templateFix;
+      document.getElementById('email-send').value = email;
+      document.getElementById('subject-send').value = "Tagihan Math Stoodent Bulan " + bulan + " " + tahun;
     }
   </script>
 <?= $this->endSection() ?>

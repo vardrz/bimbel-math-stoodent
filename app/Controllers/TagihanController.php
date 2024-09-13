@@ -109,4 +109,57 @@ class TagihanController extends BaseController
         session()->setFlashdata('success', 'Tagihan berhasil dihapus.');
         return redirect()->to('/tagihan');
     }
+
+    // Email
+    public function email(){
+        $template = $this->request->getPost('template');
+        $subject = $this->request->getPost('subject');
+        $email = $this->request->getPost('email');
+        
+        $this->sendEmail(
+            $email,
+            $subject,
+            $template,
+        );
+
+        session()->setFlashdata('success', 'Email tagihan berhasil dikirim ke alamat email ' . $email);
+        return redirect()->to('/tagihan');
+    }
+
+    public function emailBatch(){
+        $template = $this->request->getPost('template');
+        $tagihan = $this->tagihanModel->getWithSiswaForEmail();
+        
+        foreach($tagihan as $t){
+            $email_content = str_replace(
+                ["{siswa}", "{bulan}", "{tahun}", "{biaya}"],
+                [$t['name'], $t['bulan'], $t['tahun'], "Rp " . number_format($t['biaya']),],
+                $template
+            );
+            $this->sendEmail(
+                $t['email'],
+                "Tagihan Math Stoodent Bulan " . $t['bulan'] . ' ' . $t['tahun'],
+                $email_content
+            );
+        }
+
+        session()->setFlashdata('success', 'Email tagihan berhasil dikirim ke semua wali siswa.');
+        return redirect()->to('/tagihan');
+    }
+
+    private function sendEmail($to, $title, $message){
+        $email = service('email');
+
+		$email->setFrom('hello@mathstoodent.com','Math Stoodent');
+		$email->setTo($to);
+
+		$email->setSubject($title);
+		$email->setMessage($message);
+
+		if(!$email->send()){
+			return false;
+		}else{
+			return true;
+		}
+	}
 }
