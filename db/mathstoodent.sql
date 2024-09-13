@@ -4,7 +4,7 @@
 -- https://tableplus.com/
 --
 -- Database: mathstoodent
--- Generation Time: 2024-09-12 20:18:35.6580
+-- Generation Time: 2024-09-13 22:56:02.1770
 -- -------------------------------------------------------------
 
 
@@ -28,7 +28,17 @@ CREATE TABLE `migrations` (
   `time` int(11) NOT NULL,
   `batch` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+DROP TABLE IF EXISTS `pembayaran`;
+CREATE TABLE `pembayaran` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `tagihan_id` int(11) NOT NULL,
+  `waktu` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `foto` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `status` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 DROP TABLE IF EXISTS `siswa`;
 CREATE TABLE `siswa` (
@@ -62,12 +72,13 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 INSERT INTO `migrations` (`id`, `version`, `class`, `group`, `namespace`, `time`, `batch`) VALUES
-(11, '2024-09-12-062659', 'App\\Database\\Migrations\\Users', 'default', 'App', 1726146927, 1),
-(12, '2024-09-12-073608', 'App\\Database\\Migrations\\Siswa', 'default', 'App', 1726146927, 1),
-(13, '2024-09-12-074216', 'App\\Database\\Migrations\\Tagihan', 'default', 'App', 1726146927, 1);
+(18, '2024-09-12-062659', 'App\\Database\\Migrations\\Users', 'default', 'App', 1726242874, 1),
+(19, '2024-09-12-073608', 'App\\Database\\Migrations\\Siswa', 'default', 'App', 1726242874, 1),
+(20, '2024-09-12-074216', 'App\\Database\\Migrations\\Tagihan', 'default', 'App', 1726242874, 1),
+(21, '2024-09-13-121715', 'App\\Database\\Migrations\\Pembayaran', 'default', 'App', 1726242874, 1);
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `role`, `siswa_id`) VALUES
-(1, 'Admin', 'admin@mail.com', '$2y$10$TPXkUIx6Rf.NP9w40ZpLV.XhOr/L29QCq08k/G2PMuF407IHAQrly', 'admin', NULL);
+(1, 'Admin', 'admin@mail.com', '$2y$10$lgT5Ha6iEZz0uperE9jCeeVJalE383B9kP7fWMle8AdUZr71VNWKq', 'admin', NULL);
 
 
 
