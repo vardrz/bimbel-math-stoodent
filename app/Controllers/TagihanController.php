@@ -129,6 +129,11 @@ class TagihanController extends BaseController
     public function emailBatch(){
         $template = $this->request->getPost('template');
         $tagihan = $this->tagihanModel->getWithSiswaForEmail();
+
+        if(count($tagihan) == 0){
+            session()->setFlashdata('error', 'Tidak ada email yang dikirim karena semua tagihan sudah lunas');
+            return redirect()->to('/tagihan');
+        }
         
         foreach($tagihan as $t){
             $email_content = str_replace(

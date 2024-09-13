@@ -1,3 +1,10 @@
+<?php
+use App\Models\PembayaranModel;
+$payment = new PembayaranModel();
+$paymentCount = $payment->where('status', 'sedang dicek')->find();
+$paymentCount = count($paymentCount);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -79,7 +86,9 @@
             <a href="/pembayaran" class="nav-link">
               <i class="nav-icon fas fa-credit-card"></i>
               <p>Pembayaran</p>
-              <span class="right badge badge-danger">2</span>
+              <?php if($paymentCount > 0): ?>
+                <span class="right badge badge-danger"><?= $paymentCount ?></span>
+              <?php endif; ?>
             </a>
           </li>
           <li class="nav-item">

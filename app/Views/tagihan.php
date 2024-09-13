@@ -69,9 +69,13 @@
                         <td><?= "Rp " . number_format($d['biaya'], 0, ".", ","); ?></td>
                         <td><span class="badge text-md <?= $d['status'] == 'lunas' ? 'badge-success' : 'badge-danger' ?>"><?= $d['status']; ?></span></td>
                         <td>
-                          <button data-toggle="modal" data-target="#modal-send-email" onclick="email('<?= $d['name']; ?>', '<?= $d['bulan']; ?>', '<?= $d['tahun']; ?>', '<?= 'Rp ' . number_format($d['biaya']); ?>', '<?= $d['email']; ?>')" class="btn btn-success btn-sm"><i class="fas fa-envelope"></i></button>
-                          <a href="<?= base_url('tagihan/edit/') . $d['id']; ?>" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>
-                          <button onclick="confirmDelete('<?= base_url('tagihan/delete/') . $d['id']; ?>')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                          <?php if($d['status'] != 'lunas'): ?>
+                            <button data-toggle="modal" data-target="#modal-send-email" onclick="email('<?= $d['name']; ?>', '<?= $d['bulan']; ?>', '<?= $d['tahun']; ?>', '<?= 'Rp ' . number_format($d['biaya']); ?>', '<?= $d['email']; ?>')" class="btn btn-success btn-sm"><i class="fas fa-envelope"></i></button>
+                            <a href="<?= base_url('tagihan/edit/') . $d['id']; ?>" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>
+                            <button onclick="confirmDelete('<?= base_url('tagihan/delete/') . $d['id']; ?>')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                          <?php else: ?>
+                            -
+                          <?php endif; ?>
                         </td>
                       </tr>
                     <?php endforeach; ?>

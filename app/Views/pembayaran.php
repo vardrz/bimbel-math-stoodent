@@ -1,4 +1,4 @@
-<?= $this->extend('layout/wali') ?>
+<?= $this->extend('layout/template') ?>
 
 <?= $this->section('head') ?>
   <link rel="stylesheet" href="<?= base_url('assets/')?>plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
@@ -19,7 +19,13 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Welcome wali siswa <?= $siswa['name'] ?></h1>
+            <h1>Kelola Pembayaran</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="<?= base_url('home'); ?>">Home</a></li>
+              <li class="breadcrumb-item active">Pembayaran</li>
+            </ol>
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -34,34 +40,36 @@
             <!-- Default box -->
             <div class="card">
               <div class="card-body">
-                <div class="mb-5">
-                    <h3>Informasi Pembayaran Tagihan</h3>
-                    Harap membayar tagihan hanya ke nomor rekening dibawah ini :
-                    <br><span class="font-weight-bold">BNI </span> a/n Math Stoodent : <span class="font-weight-bold">110021323</span>
-                    <br><span class="font-weight-bold">BCA </span> a/n Math Stoodent : <span class="font-weight-bold">102912122</span>
-                </div>
-                <h4 class="mb-2">Tagihan Siswa : <?= $siswa['name'] ?></h4>
-                <!-- List Tagihan -->
+                <a href="<?= base_url('pembayaran?status=check'); ?>" class="btn btn-sm btn-primary btn-flat">Perlu Dicek</a>
+                <a href="<?= base_url('pembayaran?status=valid'); ?>" class="btn btn-sm btn-success btn-flat">Pembayaran Diterima</a>
+                <a href="<?= base_url('pembayaran?status=invalid'); ?>" class="btn btn-sm btn-danger btn-flat">Pembayaran Ditolak</a>
                 <table id="table" class="table table-bordered table-striped">
                   <thead>
                     <tr>
-                        <th>Tahun</th>
-                        <th>Bulan</th>
-                        <th>Biaya</th>
-                        <th>Status</th>
-                        <th>#</th>
+                      <th>Nama Siswa</th>
+                      <th>Bulan</th>
+                      <th>Tahun</th>
+                      <th>Biaya</th>
+                      <th>Waktu</th>
+                      <th>Foto</th>
+                      <th>Aksi</th>
                     </tr>
                   </thead>
                   <tbody>
                     <?php foreach($data as $d): ?>
                       <tr>
-                        <td><?= $d['tahun']; ?></td>
+                        <td><?= $d['name']; ?></td>
                         <td><?= $d['bulan']; ?></td>
+                        <td><?= $d['tahun']; ?></td>
                         <td><?= "Rp " . number_format($d['biaya'], 0, ".", ","); ?></td>
-                        <td><span class="badge text-md <?= $d['status'] == 'lunas' ? 'badge-success' : 'badge-danger' ?>"><?= $d['status']; ?></span></td>
+                        <td><?= $d['waktu']; ?></td>
+                        <td style="width: 200px"><img src="<?= base_url('bukti/') . $d['foto'] ?>" class="img-fluid"></td>
                         <td>
-                          <?php if($d['status'] != 'lunas'): ?>
-                          <a href="<?= base_url('wali/bayar/') . $d['id'] ?>" class="btn btn-sm btn-success">Upload Pembayaran</a>
+                          <?php if($d['status'] == 'sedang dicek'): ?>
+                            <button onclick="confirmAccept('<?= base_url('pembayaran/accept/' . $d['id'] . '/' . $d['tagihan_id']); ?>')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button>
+                            <button onclick="confirmReject('<?= base_url('pembayaran/reject/' . $d['id']); ?>')" class="btn btn-danger btn-sm"><i class="fa fa-ban"></i></button>
+                          <?php elseif($d['status'] == 'tidak valid'): ?>
+                            <button onclick="confirmAccept('<?= base_url('pembayaran/accept/' . $d['id'] . '/' . $d['tagihan_id']); ?>')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button>
                           <?php else: ?>
                             -
                           <?php endif; ?>
@@ -79,6 +87,7 @@
       </div>
     </section>
     <!-- /.content -->
+
 <?= $this->endSection() ?>
 
 <?= $this->section('script') ?>
@@ -101,5 +110,31 @@
         "responsive": true, "lengthChange": false, "autoWidth": false,
       }).buttons().container().appendTo('#table_wrapper .col-md-6:eq(0)');
     });
+
+    function confirmAccept(href){
+      Swal.fire({
+        title: 'Konfirmasi',
+        text: 'Apakah anda yakin bukti pembayaran ini valid?',
+        icon: 'question',
+        showCancelButton: true,
+        cancelButtonText: 'Batal',
+        confirmButtonText: 'Ya',
+      }).then((val) => {
+        val['isConfirmed'] && (window.location.href = href)
+      })
+    }
+
+    function confirmReject(href){
+      Swal.fire({
+        title: 'Konfirmasi',
+        text: 'Tolak bukti pembayaran ini?',
+        icon: 'question',
+        showCancelButton: true,
+        cancelButtonText: 'Batal',
+        confirmButtonText: 'Ya',
+      }).then((val) => {
+        val['isConfirmed'] && (window.location.href = href)
+      })
+    }
   </script>
 <?= $this->endSection() ?>
