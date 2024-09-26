@@ -110,61 +110,96 @@ class TagihanController extends BaseController
         return redirect()->to('/tagihan');
     }
 
-    // Email
-    public function email(){
+    // Fungsi ini sudah tak ubah jadi send notif wa
+    public function notif(){
         $template = $this->request->getPost('template');
         $subject = $this->request->getPost('subject');
-        $email = $this->request->getPost('email');
         
-        $this->sendEmail(
-            $email,
-            $subject,
-            $template,
+        $whatsapp = $this->request->getPost('whatsapp');
+        $text = $subject . "\r\n\r\n" . $template;
+        
+        $this->sendSingleNotif(
+            $whatsapp,
+            $text
         );
 
-        session()->setFlashdata('success', 'Email tagihan berhasil dikirim ke alamat email ' . $email);
+        session()->setFlashdata('success', 'Notifikasi tagihan berhasil dikirim ke nomor ' . $whatsapp);
         return redirect()->to('/tagihan');
     }
 
-    public function emailBatch(){
-        $template = $this->request->getPost('template');
-        $tagihan = $this->tagihanModel->getWithSiswaForEmail();
+    private function sendSingleNotif($whatsapp, $text){
+        $token = getenv("FONNTE_TOKEN");
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://api.fonnte.com/send',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => array(
+            'target' => $whatsapp,
+            'message' => $text,
+            'countryCode' => '62',
+        ),
+        CURLOPT_HTTPHEADER => array(
+            'Authorization: ' . $token
+        ),
+        ));
+
+        curl_exec($curl);
+        curl_close($curl);
+	}
+
+    public function notifBatch(){
+        $template = "Tagihan Math Stodent Bulan {bulan} {tahun} \r\n\r\n" . $this->request->getPost('template');
+        $tagihan = $this->tagihanModel->getWithSiswaForNotif();
 
         if(count($tagihan) == 0){
             session()->setFlashdata('error', 'Tidak ada email yang dikirim karena semua tagihan sudah lunas');
             return redirect()->to('/tagihan');
         }
-        
+
+        $data = [];
         foreach($tagihan as $t){
-            $email_content = str_replace(
-                ["{siswa}", "{bulan}", "{tahun}", "{biaya}"],
-                [$t['name'], $t['bulan'], $t['tahun'], "Rp " . number_format($t['biaya']),],
-                $template
-            );
-            $this->sendEmail(
-                $t['email'],
-                "Tagihan Math Stoodent Bulan " . $t['bulan'] . ' ' . $t['tahun'],
-                $email_content
-            );
+            array_push($data, [
+                "target" => $t['username'],
+                "message" => str_replace(
+                    ["{siswa}", "{bulan}", "{tahun}", "{biaya}"],
+                    [$t['name'], $t['bulan'], $t['tahun'], "Rp " . number_format($t['biaya']),],
+                    $template
+                ),
+                "delay" => "2"
+            ]);
         }
 
-        session()->setFlashdata('success', 'Email tagihan berhasil dikirim ke semua wali siswa.');
+        $this->sendBatchNotif(json_encode($data));
+
+        session()->setFlashdata('success', 'Notifikasi berhasil dikirim ke semua wali siswa.');
         return redirect()->to('/tagihan');
     }
 
-    private function sendEmail($to, $title, $message){
-        $email = service('email');
+    private function sendBatchNotif($data){
+        $token = getenv("FONNTE_TOKEN");
+        $curl = curl_init();
 
-		$email->setFrom('hello@mathstoodent.com','Math Stoodent');
-		$email->setTo($to);
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://api.fonnte.com/send',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => array('data' => $data),
+            CURLOPT_HTTPHEADER => array('Authorization: ' . $token),
+        ));
 
-		$email->setSubject($title);
-		$email->setMessage($message);
-
-		if(!$email->send()){
-			return false;
-		}else{
-			return true;
-		}
-	}
+        curl_exec($curl);
+        curl_close($curl);
+    }
 }

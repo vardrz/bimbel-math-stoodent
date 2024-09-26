@@ -31,15 +31,15 @@
 
       <form action="/login" method="post">
         <div class="input-group">
-          <input type="email" class="form-control" placeholder="Email" name="email" required>
+          <input type="text" class="form-control" placeholder="Username" name="username" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
             </div>
           </div>
         </div>
-        <?php if (isset(session()->get('validator')['email'])) : ?>
-            <span class="text-danger text-sm"><?= session()->get('validator')['email']; ?></span>
+        <?php if (isset(session()->get('validator')['username'])) : ?>
+            <span class="text-danger text-sm"><?= session()->get('validator')['username']; ?></span>
         <?php endif; ?>
         <div class="input-group mt-2">
           <input type="password" class="form-control" placeholder="Password" name="password" required>
@@ -52,14 +52,14 @@
         <?php if (isset(session()->get('validator')['password'])) : ?>
             <span class="text-danger text-sm"><?= session()->get('validator')['password']; ?></span>
         <?php endif; ?>
-        <button href="#" class="btn btn-block btn-primary mt-3">
+        <button href="#" class="btn btn-block btn-primary my-3">
             Login
         </button>
       </form>
 
-      <p class="mt-3">
-        <a href="forgot-password.html">Lupa password?</a>
-      </p>
+      <!-- <p class="mt-3">
+        <a href="#">Lupa password?</a>
+      </p> -->
     </div>
     <!-- /.card-body -->
   </div>

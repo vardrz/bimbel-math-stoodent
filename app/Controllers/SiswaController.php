@@ -35,11 +35,10 @@ class SiswaController extends BaseController
     public function save()
     {
         if (!$this->validate([
-            'email' => [
-                'rules' => 'required|valid_email',
+            'whatsapp' => [
+                'rules' => 'required',
                 'errors' => [
-                    'required' => 'Email wajib diisi',
-                    'valid_email' => 'Email tidak valid'
+                    'required' => 'Nomor Whatsapp wajib diisi',
                 ]
             ],
         ])) {
@@ -50,14 +49,14 @@ class SiswaController extends BaseController
         $dataSiswa = [
             "name" => $this->request->getPost('name'),
             "wali" => $this->request->getPost('wali_name'),
-            "email_wali" => $this->request->getPost('email')
+            "whatsapp" => $this->request->getPost('whatsapp')
         ];
 
         $this->siswaModel->save($dataSiswa);
 
         $dataWali = [
             "name" => $this->request->getPost('wali_name'),
-            "email" => $this->request->getPost('email'),
+            "username" => $this->request->getPost('whatsapp'),
             "password" => password_hash('password123', PASSWORD_BCRYPT),
             "role" => "wali",
             "siswa_id" => $this->siswaModel->getInsertID()
@@ -81,11 +80,10 @@ class SiswaController extends BaseController
     public function update()
     {
         if (!$this->validate([
-            'email' => [
-                'rules' => 'required|valid_email',
+            'whatsapp' => [
+                'rules' => 'required',
                 'errors' => [
-                    'required' => 'Email wajib diisi',
-                    'valid_email' => 'Email tidak valid'
+                    'required' => 'Nomor Whatsapp wajib diisi',
                 ]
             ],
         ])) {
@@ -96,14 +94,14 @@ class SiswaController extends BaseController
         $dataSiswa = [
             "name" => $this->request->getPost('name'),
             "wali" => $this->request->getPost('wali_name'),
-            "email_wali" => $this->request->getPost('email')
+            "whatsapp" => $this->request->getPost('whatsapp')
         ];
 
         $this->siswaModel->update($this->request->getPost('id'), $dataSiswa);
 
         $dataWali = [
             "name" => $this->request->getPost('wali_name'),
-            "email" => $this->request->getPost('email'),
+            "username" => $this->request->getPost('whatsapp'),
         ];
 
         $this->userModel->where('siswa_id', $this->request->getPost('id'))->set($dataWali)->update();

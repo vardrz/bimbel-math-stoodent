@@ -23,11 +23,10 @@ class LoginController extends BaseController
     public function login()
     {
         if (!$this->validate([
-            'email' => [
-                'rules' => 'required|valid_email',
+            'username' => [
+                'rules' => 'required',
                 'errors' => [
-                    'required' => 'Email wajib diisi',
-                    'valid_email' => 'Email tidak valid'
+                    'required' => 'Username wajib diisi',
                 ]
             ],
             'password' => [
@@ -41,15 +40,15 @@ class LoginController extends BaseController
             return redirect()->to(base_url());
         }
 
-        $email = $this->request->getPost('email');
+        $username = $this->request->getPost('username');
         $password = $this->request->getPost('password');
-        $admin = $this->userModel->where('email', $email)->first();
+        $admin = $this->userModel->where('username', $username)->first();
 
         if ($admin) {
             if (password_verify($password, $admin['password'])) {
                 if($admin['role'] === "admin"){
                     session()->set([
-                        'email' => $admin['email'],
+                        'username' => $admin['username'],
                         'name' => $admin['name'],
                         'role' => $admin['role'],
                         'logged_in' => TRUE
@@ -57,7 +56,7 @@ class LoginController extends BaseController
                     return redirect()->to(base_url('home'));
                 }else{
                     session()->set([
-                        'email' => $admin['email'],
+                        'username' => $admin['username'],
                         'name' => $admin['name'],
                         'role' => $admin['role'],
                         'siswa_id' => $admin['siswa_id'],
@@ -70,7 +69,7 @@ class LoginController extends BaseController
                 return redirect()->to(base_url());
             }
         } else {
-            session()->setFlashdata('error', 'Email tidak terdaftar');
+            session()->setFlashdata('error', 'Username tidak terdaftar');
             return redirect()->to(base_url());
         }
     }

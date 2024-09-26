@@ -12,7 +12,7 @@ class UserSeeder extends Seeder
         $admin = new UserModel();
 
         $insertdata['name'] = 'Admin';
-        $insertdata['email'] = 'admin@mail.com';
+        $insertdata['username'] = 'mathstoodent';
         $insertdata['password'] = password_hash('password', PASSWORD_BCRYPT);
         $insertdata['role'] = 'admin';
 

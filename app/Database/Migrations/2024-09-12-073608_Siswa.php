@@ -23,7 +23,7 @@ class Siswa extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => 100
             ],
-            'email_wali' => [
+            'whatsapp' => [
                 'type' => 'VARCHAR',
                 'constraint' => 100
             ],

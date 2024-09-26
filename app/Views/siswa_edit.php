@@ -49,10 +49,10 @@
                                 <input type="text" class="form-control" id="wali_name" value="<?= $data['wali'] ?>" placeholder="Nama Wali" name="wali_name" required>
                             </div>
                             <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" class="form-control" id="email" value="<?= $data['email_wali'] ?>" placeholder="Email" name="email" required>
-                                <?php if (isset(session()->get('validator')['email'])) : ?>
-                                    <span class="text-danger text-sm"><?= session()->get('validator')['email']; ?></span>
+                                <label for="whatsapp">Whatsapp</label>
+                                <input type="whatsapp" class="form-control" id="whatsapp" value="<?= $data['whatsapp'] ?>" placeholder="Nomor Whatsapp" name="whatsapp" required>
+                                <?php if (isset(session()->get('validator')['whatsapp'])) : ?>
+                                    <span class="text-danger text-sm"><?= session()->get('validator')['whatsapp']; ?></span>
                                 <?php endif; ?>
                             </div>
                         </div>

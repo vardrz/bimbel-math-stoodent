@@ -47,7 +47,7 @@
                     <tr>
                       <th>Nama Siswa</th>
                       <th>Nama Wali</th>
-                      <th>Email Wali</th>
+                      <th>Whatsapp Wali</th>
                       <th>Aksi</th>
                     </tr>
                   </thead>
@@ -56,7 +56,7 @@
                       <tr>
                         <td><?= $d['name']; ?></td>
                         <td><?= $d['wali']; ?></td>
-                        <td><?= $d['email_wali']; ?></td>
+                        <td><?= $d['whatsapp']; ?></td>
                         <td>
                           <a href="<?= base_url('siswa/edit/') . $d['id']; ?>" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>
                           <button onclick="confirmDelete('<?= base_url('siswa/delete/') . $d['id']; ?>')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>

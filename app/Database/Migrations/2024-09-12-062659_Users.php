@@ -19,7 +19,7 @@ class Users extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => 100
             ],
-            'email' => [
+            'username' => [
                 'type' => 'VARCHAR',
                 'constraint' => 100
             ],

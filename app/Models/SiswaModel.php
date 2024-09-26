@@ -12,7 +12,7 @@ class SiswaModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ["name", "wali", "email_wali"];
+    protected $allowedFields    = ["name", "wali", "whatsapp"];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

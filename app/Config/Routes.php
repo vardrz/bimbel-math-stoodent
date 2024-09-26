@@ -30,9 +30,9 @@ $routes->group('/', ['filter' => 'logout'], function ($routes) {
     $routes->get('/pembayaran', 'PembayaranController::index');
     $routes->get('/pembayaran/accept/(:any)/(:any)', 'PembayaranController::accept/$1/$2');
     $routes->get('/pembayaran/reject/(:any)', 'PembayaranController::reject/$1');
-    // Email
-    $routes->post('/tagihan/email/batch', 'TagihanController::emailBatch');
-    $routes->post('/tagihan/email/send', 'TagihanController::email');
+    // Notif
+    $routes->post('/tagihan/notif/batch', 'TagihanController::notifBatch');
+    $routes->post('/tagihan/notif/send', 'TagihanController::notif');
 
 
 

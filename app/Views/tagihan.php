@@ -45,7 +45,7 @@
                     <a href="<?= base_url('tagihan/add') ?>" class="btn btn-primary mb-3">+ Buat Tagihan</a>
                   </div>
                   <div class="col-6 text-right">
-                    <button class="btn btn-success mb-3" data-toggle="modal" data-target="#modal-email">Kirim Email</button>
+                    <button class="btn btn-success mb-3" data-toggle="modal" data-target="#modal-notif">Kirim Notif Tagihan</button>
                   </div>
                 </div>
 
@@ -70,7 +70,7 @@
                         <td><span class="badge text-md <?= $d['status'] == 'lunas' ? 'badge-success' : 'badge-danger' ?>"><?= $d['status']; ?></span></td>
                         <td>
                           <?php if($d['status'] != 'lunas'): ?>
-                            <button data-toggle="modal" data-target="#modal-send-email" onclick="email('<?= $d['name']; ?>', '<?= $d['bulan']; ?>', '<?= $d['tahun']; ?>', '<?= 'Rp ' . number_format($d['biaya']); ?>', '<?= $d['email']; ?>')" class="btn btn-success btn-sm"><i class="fas fa-envelope"></i></button>
+                            <button data-toggle="modal" data-target="#modal-send-notif" onclick="notif('<?= $d['name']; ?>', '<?= $d['bulan']; ?>', '<?= $d['tahun']; ?>', '<?= 'Rp ' . number_format($d['biaya']); ?>', '<?= $d['username']; ?>')" class="btn btn-success btn-sm"><i class="fa fa-bell"></i></button>
                             <a href="<?= base_url('tagihan/edit/') . $d['id']; ?>" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>
                             <button onclick="confirmDelete('<?= base_url('tagihan/delete/') . $d['id']; ?>')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                           <?php else: ?>
@@ -91,19 +91,19 @@
     </section>
     <!-- /.content -->
 
-    <div class="modal fade" id="modal-email">
+    <div class="modal fade" id="modal-notif">
       <div class="modal-dialog">
         <div class="modal-content">
-          <form action="<?= base_url('tagihan/email/batch'); ?>" method="post">
+          <form action="<?= base_url('tagihan/notif/batch'); ?>" method="post">
           <div class="modal-header">
-            <h5 class="modal-title">Kirim Notifikasi Email</h5>
+            <h5 class="modal-title">Kirim Notifikasi</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
-            <p>Fitur ini akan mengirim email tagihan ke setiap siswa yang belum lunas.</p>
-            <label for="template">Template Email</label>
+            <p>Fitur ini akan mengirim notifikasi tagihan ke nomor whatsapp setiap wali siswa yang belum lunas.</p>
+            <label for="template">Template Tagihan</label>
 <textarea name="template" id="template" class="form-control" rows="8">
 Rincian Tagihan Math Stoodent
 
@@ -121,33 +121,33 @@ Math Stoodent</textarea>
           </div>
           <div class="modal-footer justify-content-between">
             <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
-            <button type="submit" class="btn btn-primary">Kirim Email</button>
+            <button type="submit" class="btn btn-primary">Kirim</button>
           </div>
           </form>
         </div>
       </div>
     </div>
 
-    <div class="modal fade" id="modal-send-email">
+    <div class="modal fade" id="modal-send-notif">
       <div class="modal-dialog">
         <div class="modal-content">
-          <form action="<?= base_url('tagihan/email/send'); ?>" method="post">
+          <form action="<?= base_url('tagihan/notif/send'); ?>" method="post">
           <div class="modal-header">
-            <h5 class="modal-title">Kirim Notifikasi Email</h5>
+            <h5 class="modal-title">Kirim Notifikasi</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
-            <p>Kirim email notifikasi.</p>
-            <label for="template-send">Template Email</label>
-            <input type="hidden" name="email" id="email-send">
+            <p>Kirim whatsapp notifikasi.</p>
+            <label for="template-send">Template Tagihan</label>
+            <input type="hidden" name="whatsapp" id="whatsapp-send">
             <input type="hidden" name="subject" id="subject-send">
             <textarea name="template" id="template-send" class="form-control" rows="8"></textarea>
           </div>
           <div class="modal-footer justify-content-between">
             <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
-            <button type="submit" class="btn btn-primary">Kirim Email</button>
+            <button type="submit" class="btn btn-primary">Kirim</button>
           </div>
           </form>
         </div>
@@ -206,7 +206,7 @@ Math Stoodent</textarea>
       })
     }
 
-    function email(name, bulan, tahun, biaya, email){
+    function notif(name, bulan, tahun, biaya, whatsapp){
       var template = `Rincian Tagihan Math Stoodent
 
 Nama Siswa : {siswa}
@@ -224,7 +224,7 @@ Math Stoodent`;
       var templateFix = template.replace('{siswa}', name).replace('{bulan}', bulan).replace('{tahun}', tahun).replace('{biaya}', biaya);
 
       document.getElementById('template-send').innerHTML = templateFix;
-      document.getElementById('email-send').value = email;
+      document.getElementById('whatsapp-send').value = whatsapp;
       document.getElementById('subject-send').value = "Tagihan Math Stoodent Bulan " + bulan + " " + tahun;
     }
   </script>
